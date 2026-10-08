@@ -1,0 +1,2579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>MonoShop — Ecommerce</title>
+
+<style>
+:root{
+  --bg:#f6f6f3;
+  --card:#fff;
+  --text:#161616;
+  --muted:#858585;
+  --line:#e8e8e4;
+  --dark:#111;
+  --accent:#a8ff54;
+  --accent-dark:#80d936;
+  --red:#ef6262;
+  --orange:#f3a53b;
+  --green:#16a46c;
+  --shadow:0 8px 30px rgba(0,0,0,.06);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:230px;
+  background:#111;
+  color:#fff;
+  padding:24px 15px;
+  z-index:100;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:800;
+  padding:0 12px 30px;
+  letter-spacing:-1px;
+}
+
+.logo span{color:var(--accent)}
+
+.section-title{
+  color:#555;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  padding:15px 12px 8px;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.nav button{
+  border:0;
+  background:transparent;
+  color:#999;
+  text-align:left;
+  padding:11px 12px;
+  border-radius:8px;
+  font-size:12px;
+  transition:.2s;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:#242424;
+  color:#fff;
+}
+
+.nav button.active{
+  box-shadow:inset 3px 0 var(--accent);
+}
+
+.store-status{
+  position:absolute;
+  bottom:20px;
+  left:20px;
+  right:20px;
+  padding:13px;
+  border-top:1px solid #292929;
+  color:#999;
+  font-size:10px;
+}
+
+.store-status b{color:var(--accent)}
+
+/* ================= MAIN ================= */
+
+.main{
+  margin-left:230px;
+  min-height:100vh;
+}
+
+.topbar{
+  height:70px;
+  background:rgba(255,255,255,.95);
+  border-bottom:1px solid var(--line);
+  padding:0 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:50;
+  backdrop-filter:blur(10px);
+}
+
+.search{
+  width:330px;
+  border:1px solid var(--line);
+  background:#f7f7f5;
+  border-radius:8px;
+  padding:10px 13px;
+  outline:none;
+  font-size:12px;
+}
+
+.top-actions{
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.icon-btn{
+  width:35px;
+  height:35px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#fff;
+}
+
+.avatar{
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  background:var(--accent);
+  display:grid;
+  place-items:center;
+  font-size:10px;
+  font-weight:bold;
+}
+
+/* ================= CONTENT ================= */
+
+.content{
+  max-width:1500px;
+  padding:28px;
+  margin:auto;
+}
+
+.view{display:none}
+.view.active{display:block}
+
+.page-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:22px;
+}
+
+.page-head h1{
+  font-size:25px;
+  letter-spacing:-1px;
+}
+
+.page-head p{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.btn{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:9px 13px;
+  border-radius:7px;
+  font-size:11px;
+}
+
+.btn-dark{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+
+.btn-accent{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#111;
+}
+
+.btn-danger{
+  color:#fff;
+  background:var(--red);
+  border-color:var(--red);
+}
+
+/* ================= DASHBOARD ================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:18px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:12px;
+  box-shadow:var(--shadow);
+}
+
+.stat{
+  padding:18px;
+}
+
+.stat-label{
+  color:#999;
+  font-size:10px;
+}
+
+.stat-value{
+  font-size:24px;
+  font-weight:750;
+  margin:9px 0 5px;
+}
+
+.stat-change{
+  font-size:10px;
+  color:var(--green);
+}
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1.6fr 1fr;
+  gap:18px;
+  margin-bottom:18px;
+}
+
+.panel{
+  padding:20px;
+}
+
+.panel-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.panel-head h3{
+  font-size:14px;
+}
+
+.panel-head p{
+  color:#999;
+  font-size:10px;
+  margin-top:3px;
+}
+
+/* Chart */
+
+.chart{
+  height:240px;
+  display:flex;
+  align-items:flex-end;
+  gap:10px;
+  padding:15px 5px 28px;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 45px,
+      #ededeb 46px
+    );
+}
+
+.bar{
+  flex:1;
+  max-width:70px;
+  background:#181818;
+  border-radius:5px 5px 2px 2px;
+  position:relative;
+  transition:.25s;
+}
+
+.bar:hover{
+  background:var(--accent);
+  transform:translateY(-5px);
+}
+
+.bar span{
+  position:absolute;
+  bottom:-21px;
+  left:50%;
+  transform:translateX(-50%);
+  color:#999;
+  font-size:9px;
+}
+
+/* ================= TABLE ================= */
+
+.table-card{
+  padding:20px;
+}
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  text-align:left;
+  color:#999;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  border-bottom:1px solid var(--line);
+  padding:9px 7px;
+}
+
+td{
+  border-bottom:1px solid #f0f0ed;
+  padding:11px 7px;
+  font-size:11px;
+}
+
+.status{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:20px;
+  font-size:9px;
+  background:#e8faf1;
+  color:#15925f;
+}
+
+.status.pending{
+  background:#fff5df;
+  color:#b67812;
+}
+
+.status.cancelled{
+  background:#ffeaea;
+  color:#c65353;
+}
+
+.status.shipped{
+  background:#eaf0ff;
+  color:#526dbb;
+}
+
+/* ================= PRODUCTS ================= */
+
+.toolbar{
+  display:flex;
+  gap:8px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+
+.filter{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:9px 11px;
+  border-radius:7px;
+  font-size:11px;
+}
+
+.product-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+}
+
+.product-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:11px;
+  overflow:hidden;
+  transition:.2s;
+}
+
+.product-card:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow);
+}
+
+.product-image{
+  height:190px;
+  position:relative;
+  background:#f1f1ef;
+}
+
+.product-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.product-badge{
+  position:absolute;
+  left:10px;
+  top:10px;
+  background:#111;
+  color:#fff;
+  padding:5px 7px;
+  border-radius:5px;
+  font-size:8px;
+}
+
+.product-body{
+  padding:12px;
+}
+
+.product-body h3{
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+.product-body p{
+  color:#999;
+  font-size:10px;
+}
+
+.product-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:10px;
+}
+
+.price{
+  font-size:13px;
+  font-weight:bold;
+}
+
+.stock{
+  font-size:9px;
+  color:var(--green);
+}
+
+.stock.low{color:var(--red)}
+
+.product-actions{
+  display:flex;
+  gap:5px;
+  margin-top:10px;
+}
+
+.product-actions button{
+  flex:1;
+}
+
+/* ================= CUSTOMERS ================= */
+
+.customer{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.customer-avatar{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:#eee;
+  display:grid;
+  place-items:center;
+  font-size:9px;
+  font-weight:bold;
+}
+
+/* ================= ANALYTICS ================= */
+
+.analytics-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.metric-card{
+  padding:18px;
+}
+
+.metric-card h3{
+  font-size:11px;
+  color:#888;
+}
+
+.metric-card strong{
+  display:block;
+  font-size:23px;
+  margin:8px 0;
+}
+
+.progress{
+  height:6px;
+  background:#eee;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress div{
+  height:100%;
+  background:#111;
+  border-radius:20px;
+}
+
+/* ================= CART ================= */
+
+.cart-layout{
+  display:grid;
+  grid-template-columns:1.5fr .7fr;
+  gap:18px;
+}
+
+.cart-item{
+  display:flex;
+  gap:13px;
+  padding:14px 0;
+  border-bottom:1px solid var(--line);
+}
+
+.cart-item img{
+  width:75px;
+  height:75px;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+.cart-info{
+  flex:1;
+}
+
+.cart-info h3{
+  font-size:12px;
+}
+
+.cart-info p{
+  color:#999;
+  font-size:10px;
+  margin-top:4px;
+}
+
+.qty{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:8px;
+}
+
+.qty button{
+  width:24px;
+  height:24px;
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:5px;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  font-size:11px;
+}
+
+.summary-total{
+  border-top:1px solid var(--line);
+  margin-top:10px;
+  padding-top:14px;
+  font-size:16px;
+  font-weight:bold;
+}
+
+/* ================= INVENTORY ================= */
+
+.inventory-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.inventory-card{
+  padding:18px;
+}
+
+.inventory-card h3{
+  font-size:12px;
+}
+
+.inventory-number{
+  font-size:28px;
+  font-weight:bold;
+  margin:10px 0;
+}
+
+/* ================= SETTINGS ================= */
+
+.settings{
+  max-width:750px;
+}
+
+.setting{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:17px;
+  margin-bottom:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.setting h3{
+  font-size:12px;
+}
+
+.setting p{
+  font-size:10px;
+  color:#999;
+  margin-top:4px;
+}
+
+.switch{
+  width:42px;
+  height:23px;
+  background:#ddd;
+  border-radius:20px;
+  position:relative;
+}
+
+.switch.on{
+  background:#111;
+}
+
+.switch:after{
+  content:"";
+  width:17px;
+  height:17px;
+  background:white;
+  border-radius:50%;
+  position:absolute;
+  top:3px;
+  left:3px;
+  transition:.2s;
+}
+
+.switch.on:after{
+  left:22px;
+}
+
+/* ================= MODAL ================= */
+
+.modal-bg{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:500;
+}
+
+.modal-bg.show{
+  display:flex;
+}
+
+.modal{
+  width:min(500px,92%);
+  max-height:90vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:13px;
+  padding:22px;
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.modal-head h2{
+  font-size:17px;
+}
+
+.close{
+  border:0;
+  background:#eee;
+  border-radius:50%;
+  width:28px;
+  height:28px;
+}
+
+.form-group{
+  margin-bottom:13px;
+}
+
+.form-group label{
+  display:block;
+  font-size:10px;
+  color:#777;
+  margin-bottom:5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  border:1px solid var(--line);
+  padding:10px;
+  border-radius:7px;
+  outline:none;
+  font-size:11px;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:7px;
+  margin-top:18px;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#111;
+  color:#fff;
+  padding:12px 16px;
+  border-radius:8px;
+  font-size:11px;
+  transform:translateY(80px);
+  opacity:0;
+  transition:.3s;
+  z-index:1000;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+/* ================= MOBILE ================= */
+
+.mobile-menu{
+  display:none;
+}
+
+@media(max-width:1100px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .dashboard-grid,
+  .cart-layout{grid-template-columns:1fr}
+  .product-grid{grid-template-columns:repeat(3,1fr)}
+  .analytics-grid,
+  .inventory-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:800px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .search{
+    width:210px;
+  }
+
+  .content{
+    padding:20px 15px;
+  }
+
+  .product-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:550px){
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .page-head{
+    align-items:flex-start;
+    gap:10px;
+    flex-direction:column;
+  }
+
+  .analytics-grid,
+  .inventory-grid{
+    grid-template-columns:1fr;
+  }
+
+  .search{
+    display:none;
+  }
+
+  .product-grid{
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+
+  .product-image{
+    height:140px;
+  }
+
+  .product-body{
+    padding:9px;
+  }
+
+  .product-actions{
+    flex-direction:column;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">mono<span>shop</span></div>
+
+  <div class="section-title">Store</div>
+
+  <div class="nav">
+    <button class="active" onclick="showView('dashboard',this)">▦ &nbsp; Dashboard</button>
+    <button onclick="showView('products',this)">□ &nbsp; Products</button>
+    <button onclick="showView('orders',this)">◫ &nbsp; Orders</button>
+    <button onclick="showView('customers',this)">♙ &nbsp; Customers</button>
+    <button onclick="showView('analytics',this)">◌ &nbsp; Analytics</button>
+  </div>
+
+  <div class="section-title">Management</div>
+
+  <div class="nav">
+    <button onclick="showView('inventory',this)">▤ &nbsp; Inventory</button>
+    <button onclick="showView('discounts',this)">% &nbsp; Discounts</button>
+    <button onclick="showView('cart',this)">🛒 &nbsp; Cart <span id="cartCount"></span></button>
+    <button onclick="showView('settings',this)">⚙ &nbsp; Settings</button>
+  </div>
+
+  <div class="store-status">
+    <b>●</b> Store is online
+  </div>
+
+</aside>
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+<header class="topbar">
+
+  <div style="display:flex;gap:10px;align-items:center">
+
+    <button class="icon-btn mobile-menu"
+            onclick="document.getElementById('sidebar').classList.toggle('open')">
+      ☰
+    </button>
+
+    <input
+      class="search"
+      id="globalSearch"
+      placeholder="Search products or orders..."
+      oninput="globalSearch()"
+    >
+
+  </div>
+
+  <div class="top-actions">
+
+    <button class="icon-btn" onclick="showToast('No new notifications')">
+      ♢
+    </button>
+
+    <button class="icon-btn" onclick="showView('cart',null)">
+      🛒
+    </button>
+
+    <div class="avatar">AK</div>
+
+  </div>
+
+</header>
+
+<div class="content">
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboard" class="view active">
+
+  <div class="page-head">
+
+    <div>
+      <h1>Good morning, Alex.</h1>
+      <p>Here's what's happening with your store today.</p>
+    </div>
+
+    <button class="btn">October 8, 2026 ▾</button>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="card stat">
+      <span class="stat-label">Total revenue</span>
+      <div class="stat-value">₹12.84L</div>
+      <span class="stat-change">↑ 18.4% this month</span>
+    </div>
+
+    <div class="card stat">
+      <span class="stat-label">Orders</span>
+      <div class="stat-value">1,248</div>
+      <span class="stat-change">↑ 12.8% this month</span>
+    </div>
+
+    <div class="card stat">
+      <span class="stat-label">Customers</span>
+      <div class="stat-value">3,842</div>
+      <span class="stat-change">↑ 8.2% this month</span>
+    </div>
+
+    <div class="card stat">
+      <span class="stat-label">Conversion</span>
+      <div class="stat-value">4.82%</div>
+      <span class="stat-change">↑ 0.6% this month</span>
+    </div>
+
+  </div>
+
+  <div class="dashboard-grid">
+
+    <div class="card panel">
+
+      <div class="panel-head">
+        <div>
+          <h3>Revenue overview</h3>
+          <p>Last 7 days</p>
+        </div>
+
+        <select class="filter">
+          <option>Weekly</option>
+          <option>Monthly</option>
+        </select>
+      </div>
+
+      <div class="chart">
+
+        <div class="bar" style="height:42%"><span>Mon</span></div>
+        <div class="bar" style="height:52%"><span>Tue</span></div>
+        <div class="bar" style="height:48%"><span>Wed</span></div>
+        <div class="bar" style="height:63%"><span>Thu</span></div>
+        <div class="bar" style="height:72%"><span>Fri</span></div>
+        <div class="bar" style="height:91%"><span>Sat</span></div>
+        <div class="bar" style="height:79%"><span>Sun</span></div>
+
+      </div>
+
+    </div>
+
+    <div class="card panel">
+
+      <div class="panel-head">
+        <div>
+          <h3>Store performance</h3>
+          <p>This month</p>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <h3>Returning customers</h3>
+        <strong>64%</strong>
+        <div class="progress">
+          <div style="width:64%"></div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <h3>Checkout completion</h3>
+        <strong>82%</strong>
+        <div class="progress">
+          <div style="width:82%"></div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <h3>Customer satisfaction</h3>
+        <strong>94%</strong>
+        <div class="progress">
+          <div style="width:94%"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card table-card">
+
+    <div class="panel-head">
+      <div>
+        <h3>Recent orders</h3>
+        <p>Latest store activity</p>
+      </div>
+
+      <button class="btn" onclick="showView('orders')">View all</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="recentOrders"></table>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= PRODUCTS ================= -->
+
+<section id="products" class="view">
+
+  <div class="page-head">
+
+    <div>
+      <h1>Products</h1>
+      <p>Manage your complete product catalog.</p>
+    </div>
+
+    <button class="btn btn-dark" onclick="openProductModal()">
+      + Add product
+    </button>
+
+  </div>
+
+  <div class="toolbar">
+
+    <input
+      class="filter"
+      id="productSearch"
+      placeholder="Search products..."
+      oninput="renderProducts()"
+    >
+
+    <select class="filter" id="categoryFilter" onchange="renderProducts()">
+      <option value="all">All categories</option>
+      <option>Electronics</option>
+      <option>Fashion</option>
+      <option>Accessories</option>
+      <option>Home</option>
+    </select>
+
+    <select class="filter" onchange="sortProducts(this.value)">
+      <option value="">Sort by</option>
+      <option value="priceLow">Price: Low to high</option>
+      <option value="priceHigh">Price: High to low</option>
+      <option value="name">Name</option>
+    </select>
+
+  </div>
+
+  <div class="product-grid" id="productGrid"></div>
+
+</section>
+
+<!-- ================= ORDERS ================= -->
+
+<section id="orders" class="view">
+
+  <div class="page-head">
+
+    <div>
+      <h1>Orders</h1>
+      <p>Track and manage customer orders.</p>
+    </div>
+
+    <button class="btn btn-dark" onclick="exportOrders()">
+      Export CSV
+    </button>
+
+  </div>
+
+  <div class="card table-card">
+
+    <div class="toolbar">
+      <select class="filter" id="orderFilter" onchange="renderOrders()">
+        <option value="all">All orders</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Processing">Processing</option>
+        <option value="Shipped">Shipped</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table id="ordersTable"></table>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= CUSTOMERS ================= -->
+
+<section id="customers" class="view">
+
+  <div class="page-head">
+
+    <div>
+      <h1>Customers</h1>
+      <p>Customer relationships and purchase history.</p>
+    </div>
+
+    <button class="btn btn-dark" onclick="showToast('Customer invite created')">
+      + Add customer
+    </button>
+
+  </div>
+
+  <div class="card table-card">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Email</th>
+          <th>Orders</th>
+          <th>Total spent</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td>
+            <div class="customer">
+              <div class="customer-avatar">RS</div>
+              Rahul Shah
+            </div>
+          </td>
+          <td>rahul@example.com</td>
+          <td>24</td>
+          <td>₹82,490</td>
+          <td><span class="status">VIP</span></td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="customer">
+              <div class="customer-avatar">PM</div>
+              Priya Mehta
+            </div>
+          </td>
+          <td>priya@example.com</td>
+          <td>18</td>
+          <td>₹61,280</td>
+          <td><span class="status">Active</span></td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="customer">
+              <div class="customer-avatar">AK</div>
+              Arjun Kapoor
+            </div>
+          </td>
+          <td>arjun@example.com</td>
+          <td>12</td>
+          <td>₹42,850</td>
+          <td><span class="status">Active</span></td>
+        </tr>
+
+        <tr>
+          <td>
+            <div class="customer">
+              <div class="customer-avatar">SN</div>
+              Sneha Nair
+            </div>
+          </td>
+          <td>sneha@example.com</td>
+          <td>7</td>
+          <td>₹19,490</td>
+          <td><span class="status">Active</span></td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+<!-- ================= ANALYTICS ================= -->
+
+<section id="analytics" class="view">
+
+  <div class="page-head">
+
+    <div>
+      <h1>Analytics</h1>
+      <p>Understand your store performance.</p>
+    </div>
+
+  </div>
+
+  <div class="analytics-grid">
+
+    <div class="card metric-card">
+      <h3>Average order value</h3>
+      <strong>₹3,840</strong>
+      <div class="progress"><div style="width:76%"></div></div>
+    </div>
+
+    <div class="card metric-card">
+      <h3>Customer retention</h3>
+      <strong>68.4%</strong>
+      <div class="progress"><div style="width:68%"></div></div>
+    </div>
+
+    <div class="card metric-card">
+      <h3>Cart abandonment</h3>
+      <strong>18.2%</strong>
+      <div class="progress"><div style="width:32%"></div></div>
+    </div>
+
+    <div class="card metric-card">
+      <h3>Organic traffic</h3>
+      <strong>48.2K</strong>
+      <div class="progress"><div style="width:82%"></div></div>
+    </div>
+
+    <div class="card metric-card">
+      <h3>Paid traffic</h3>
+      <strong>21.8K</strong>
+      <div class="progress"><div style="width:47%"></div></div>
+    </div>
+
+    <div class="card metric-card">
+      <h3>Product views</h3>
+      <strong>182K</strong>
+      <div class="progress"><div style="width:89%"></div></div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= INVENTORY ================= -->
+
+<section id="inventory" class="view">
+
+  <div class="page-head">
+
+    <div>
+      <h1>Inventory</h1>
+      <p>Monitor stock levels and availability.</p>
+    </div>
+
+  </div>
+
+  <div class="inventory-grid">
+
+    <div class="card inventory-card">
+      <h3>Total products</h3>
+      <div class="inventory-number">128</div>
+      <span class="stat-change">Healthy catalog</span>
+    </div>
+
+    <div class="card inventory-card">
+      <h3>Low stock</h3>
+      <div class="inventory-number" style="color:var(--orange)">12</div>
+      <span style="font-size:10px;color:#999">Needs attention</span>
+    </div>
+
+    <div class="card inventory-card">
+      <h3>Out of stock</h3>
+      <div class="inventory-number" style="color:var(--red)">4</div>
+      <span style="font-size:10px;color:#999">Restock required</span>
+    </div>
+
+  </div>
+
+  <br>
+
+  <div class="card table-card">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>SKU</th>
+          <th>Stock</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="inventoryTable"></tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+<!-- ================= DISCOUNTS ================= -->
+
+<section id="discounts" class="view">
+
+  <div class="page-head">
+
+    <div>
+      <h1>Discounts</h1>
+      <p>Create and manage promotional campaigns.</p>
+    </div>
+
+    <button class="btn btn-dark" onclick="createDiscount()">
+      + Create discount
+    </button>
+
+  </div>
+
+  <div class="card table-card">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Discount</th>
+          <th>Uses</th>
+          <th>Expires</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td><b>WELCOME10</b></td>
+          <td>10% off</td>
+          <td>842</td>
+          <td>Dec 31, 2026</td>
+          <td><span class="status">Active</span></td>
+        </tr>
+
+        <tr>
+          <td><b>MONO20</b></td>
+          <td>20% off</td>
+          <td>421</td>
+          <td>Nov 30, 2026</td>
+          <td><span class="status">Active</span></td>
+        </tr>
+
+        <tr>
+          <td><b>SUMMER25</b></td>
+          <td>25% off</td>
+          <td>1,024</td>
+          <td>Expired</td>
+          <td><span class="status cancelled">Expired</span></td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</section>
+
+<!-- ================= CART ================= -->
+
+<section id="cart" class="view">
+
+  <div class="page-head">
+
+    <div>
+      <h1>Your cart</h1>
+      <p>Review products before checkout.</p>
+    </div>
+
+  </div>
+
+  <div class="cart-layout">
+
+    <div class="card panel" id="cartItems"></div>
+
+    <div class="card panel">
+
+      <div class="panel-head">
+        <h3>Order summary</h3>
+      </div>
+
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <b id="cartSubtotal">₹0</b>
+      </div>
+
+      <div class="summary-row">
+        <span>Shipping</span>
+        <b>₹99</b>
+      </div>
+
+      <div class="summary-row">
+        <span>Discount</span>
+        <b style="color:var(--green)">-₹0</b>
+      </div>
+
+      <div class="summary-total">
+        <div class="summary-row">
+          <span>Total</span>
+          <b id="cartTotal">₹99</b>
+        </div>
+      </div>
+
+      <button
+        class="btn btn-accent"
+        style="width:100%;margin-top:12px"
+        onclick="checkout()"
+      >
+        Proceed to checkout
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= SETTINGS ================= -->
+
+<section id="settings" class="view">
+
+  <div class="page-head">
+
+    <div>
+      <h1>Settings</h1>
+      <p>Configure your store preferences.</p>
+    </div>
+
+  </div>
+
+  <div class="settings">
+
+    <div class="setting">
+      <div>
+        <h3>Email notifications</h3>
+        <p>Receive notifications about new orders.</p>
+      </div>
+      <div class="switch on" onclick="toggleSwitch(this)"></div>
+    </div>
+
+    <div class="setting">
+      <div>
+        <h3>Low stock alerts</h3>
+        <p>Notify when products reach minimum inventory.</p>
+      </div>
+      <div class="switch on" onclick="toggleSwitch(this)"></div>
+    </div>
+
+    <div class="setting">
+      <div>
+        <h3>Marketing emails</h3>
+        <p>Receive ecommerce growth recommendations.</p>
+      </div>
+      <div class="switch" onclick="toggleSwitch(this)"></div>
+    </div>
+
+    <div class="setting">
+      <div>
+        <h3>Maintenance mode</h3>
+        <p>Temporarily disable the storefront.</p>
+      </div>
+      <div class="switch" onclick="toggleSwitch(this)"></div>
+    </div>
+
+    <button class="btn btn-dark" onclick="showToast('Settings saved')">
+      Save settings
+    </button>
+
+  </div>
+
+</section>
+
+</div>
+</main>
+
+<!-- ================= PRODUCT MODAL ================= -->
+
+<div class="modal-bg" id="productModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+      <h2>Add product</h2>
+      <button class="close" onclick="closeModal()">×</button>
+    </div>
+
+    <form onsubmit="addProduct(event)">
+
+      <div class="form-group">
+        <label>Product name</label>
+        <input id="newName" required placeholder="Product name">
+      </div>
+
+      <div class="form-group">
+        <label>Category</label>
+        <select id="newCategory">
+          <option>Electronics</option>
+          <option>Fashion</option>
+          <option>Accessories</option>
+          <option>Home</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Price</label>
+        <input id="newPrice" type="number" required placeholder="4999">
+      </div>
+
+      <div class="form-group">
+        <label>Stock</label>
+        <input id="newStock" type="number" required placeholder="100">
+      </div>
+
+      <div class="form-group">
+        <label>Image URL</label>
+        <input
+          id="newImage"
+          placeholder="https://..."
+          value="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80"
+        >
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-accent">Add product</button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- ================= CHECKOUT MODAL ================= -->
+
+<div class="modal-bg" id="checkoutModal">
+
+  <div class="modal">
+
+    <div class="modal-head">
+      <h2>Checkout</h2>
+      <button class="close" onclick="closeCheckout()">×</button>
+    </div>
+
+    <div class="form-group">
+      <label>Full name</label>
+      <input id="checkoutName" placeholder="Alex Kumar">
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input id="checkoutEmail" type="email" placeholder="alex@example.com">
+    </div>
+
+    <div class="form-group">
+      <label>Shipping address</label>
+      <textarea id="checkoutAddress" rows="3" placeholder="Enter delivery address"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Payment method</label>
+      <select>
+        <option>Credit / Debit Card</option>
+        <option>UPI</option>
+        <option>Cash on delivery</option>
+      </select>
+    </div>
+
+    <button
+      class="btn btn-accent"
+      style="width:100%"
+      onclick="placeOrder()"
+    >
+      Place order
+    </button>
+
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+let products = [
+
+  {
+    id:1,
+    name:"Wireless Headphones",
+    category:"Electronics",
+    price:4999,
+    stock:42,
+    sold:248,
+    image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=700&q=80"
+  },
+
+  {
+    id:2,
+    name:"Smart Watch",
+    category:"Electronics",
+    price:6499,
+    stock:28,
+    sold:189,
+    image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=700&q=80"
+  },
+
+  {
+    id:3,
+    name:"Running Shoes",
+    category:"Fashion",
+    price:3899,
+    stock:15,
+    sold:154,
+    image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"
+  },
+
+  {
+    id:4,
+    name:"Urban Backpack",
+    category:"Accessories",
+    price:2299,
+    stock:8,
+    sold:121,
+    image:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=80"
+  },
+
+  {
+    id:5,
+    name:"Minimal Chair",
+    category:"Home",
+    price:8499,
+    stock:24,
+    sold:84,
+    image:"https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=700&q=80"
+  },
+
+  {
+    id:6,
+    name:"Classic Sneakers",
+    category:"Fashion",
+    price:3299,
+    stock:31,
+    sold:96,
+    image:"https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=700&q=80"
+  },
+
+  {
+    id:7,
+    name:"Travel Bag",
+    category:"Accessories",
+    price:2799,
+    stock:6,
+    sold:75,
+    image:"https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=700&q=80"
+  },
+
+  {
+    id:8,
+    name:"Desk Lamp",
+    category:"Home",
+    price:1899,
+    stock:52,
+    sold:61,
+    image:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=80"
+  }
+
+];
+
+let orders = [
+
+  {
+    id:"MS-8492",
+    customer:"Rahul Shah",
+    total:8490,
+    status:"Delivered"
+  },
+
+  {
+    id:"MS-8491",
+    customer:"Priya Mehta",
+    total:4280,
+    status:"Processing"
+  },
+
+  {
+    id:"MS-8490",
+    customer:"Arjun Kapoor",
+    total:12850,
+    status:"Delivered"
+  },
+
+  {
+    id:"MS-8489",
+    customer:"Sneha Nair",
+    total:2190,
+    status:"Shipped"
+  },
+
+  {
+    id:"MS-8488",
+    customer:"Riya Singh",
+    total:6390,
+    status:"Delivered"
+  }
+
+];
+
+let cart = [];
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function showView(id,button){
+
+  document.querySelectorAll(".view")
+    .forEach(v => v.classList.remove("active"));
+
+  const view=document.getElementById(id);
+
+  if(view) view.classList.add("active");
+
+  document.querySelectorAll(".nav button")
+    .forEach(b => b.classList.remove("active"));
+
+  if(button) button.classList.add("active");
+
+  if(id==="products") renderProducts();
+  if(id==="orders") renderOrders();
+  if(id==="inventory") renderInventory();
+  if(id==="cart") renderCart();
+
+  window.scrollTo({top:0,behavior:"smooth"});
+
+}
+
+/* =========================================================
+   PRODUCTS
+========================================================= */
+
+function renderProducts(){
+
+  const grid=document.getElementById("productGrid");
+
+  const search=
+    (document.getElementById("productSearch")?.value || "")
+    .toLowerCase();
+
+  const category=
+    document.getElementById("categoryFilter")?.value || "all";
+
+  let list=products.filter(p=>{
+
+    const matchSearch=
+      p.name.toLowerCase().includes(search) ||
+      p.category.toLowerCase().includes(search);
+
+    const matchCategory=
+      category==="all" || p.category===category;
+
+    return matchSearch && matchCategory;
+
+  });
+
+  grid.innerHTML=list.map(p=>`
+
+    <div class="product-card">
+
+      <div class="product-image">
+
+        <img src="${p.image}" alt="${p.name}">
+
+        ${p.stock<10
+          ? `<span class="product-badge">LOW STOCK</span>`
+          : ""}
+
+      </div>
+
+      <div class="product-body">
+
+        <h3>${p.name}</h3>
+
+        <p>${p.category} · ${p.sold} sold</p>
+
+        <div class="product-bottom">
+
+          <span class="price">₹${p.price.toLocaleString()}</span>
+
+          <span class="stock ${p.stock<10?'low':''}">
+            ${p.stock} in stock
+          </span>
+
+        </div>
+
+        <div class="product-actions">
+
+          <button
+            class="btn btn-accent"
+            onclick="addToCart(${p.id})"
+          >
+            Add to cart
+          </button>
+
+          <button
+            class="btn"
+            onclick="editProduct(${p.id})"
+          >
+            Edit
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `).join("");
+
+}
+
+/* =========================================================
+   PRODUCT MODAL
+========================================================= */
+
+function openProductModal(){
+  document.getElementById("productModal").classList.add("show");
+}
+
+function closeModal(){
+  document.getElementById("productModal").classList.remove("show");
+}
+
+function addProduct(e){
+
+  e.preventDefault();
+
+  const product={
+    id:Date.now(),
+    name:document.getElementById("newName").value,
+    category:document.getElementById("newCategory").value,
+    price:Number(document.getElementById("newPrice").value),
+    stock:Number(document.getElementById("newStock").value),
+    sold:0,
+    image:document.getElementById("newImage").value
+  };
+
+  products.unshift(product);
+
+  saveData();
+
+  closeModal();
+
+  e.target.reset();
+
+  renderProducts();
+
+  showToast("Product added successfully");
+
+}
+
+function editProduct(id){
+
+  const p=products.find(x=>x.id===id);
+
+  if(!p)return;
+
+  const name=prompt("Product name",p.name);
+
+  if(name===null)return;
+
+  const price=prompt("Price",p.price);
+
+  p.name=name;
+  p.price=Number(price)||p.price;
+
+  saveData();
+  renderProducts();
+
+  showToast("Product updated");
+
+}
+
+/* =========================================================
+   CART
+========================================================= */
+
+function addToCart(id){
+
+  const product=products.find(p=>p.id===id);
+
+  if(!product)return;
+
+  const existing=cart.find(x=>x.id===id);
+
+  if(existing){
+    existing.qty++;
+  }else{
+    cart.push({
+      id:id,
+      qty:1
+    });
+  }
+
+  saveData();
+  updateCartCount();
+
+  showToast(product.name+" added to cart");
+
+}
+
+function changeQty(id,amount){
+
+  const item=cart.find(x=>x.id===id);
+
+  if(!item)return;
+
+  item.qty+=amount;
+
+  if(item.qty<=0){
+    cart=cart.filter(x=>x.id!==id);
+  }
+
+  saveData();
+  renderCart();
+  updateCartCount();
+
+}
+
+function renderCart(){
+
+  const container=document.getElementById("cartItems");
+
+  if(cart.length===0){
+
+    container.innerHTML=`
+
+      <div style="padding:50px;text-align:center;color:#999">
+
+        <div style="font-size:35px">🛒</div>
+
+        <p style="margin-top:10px;font-size:12px">
+          Your cart is empty.
+        </p>
+
+        <button
+          class="btn btn-dark"
+          style="margin-top:15px"
+          onclick="showView('products')"
+        >
+          Browse products
+        </button>
+
+      </div>
+
+    `;
+
+    document.getElementById("cartSubtotal").innerText="₹0";
+    document.getElementById("cartTotal").innerText="₹0";
+
+    return;
+  }
+
+  let subtotal=0;
+
+  container.innerHTML=cart.map(item=>{
+
+    const p=products.find(x=>x.id===item.id);
+
+    if(!p)return "";
+
+    subtotal+=p.price*item.qty;
+
+    return`
+
+      <div class="cart-item">
+
+        <img src="${p.image}">
+
+        <div class="cart-info">
+
+          <h3>${p.name}</h3>
+
+          <p>${p.category}</p>
+
+          <div class="qty">
+
+            <button onclick="changeQty(${p.id},-1)">−</button>
+
+            <span>${item.qty}</span>
+
+            <button onclick="changeQty(${p.id},1)">+</button>
+
+          </div>
+
+        </div>
+
+        <strong>
+          ₹${(p.price*item.qty).toLocaleString()}
+        </strong>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+  document.getElementById("cartSubtotal").innerText=
+    "₹"+subtotal.toLocaleString();
+
+  document.getElementById("cartTotal").innerText=
+    "₹"+(subtotal+99).toLocaleString();
+
+}
+
+function updateCartCount(){
+
+  const count=cart.reduce((a,b)=>a+b.qty,0);
+
+  document.getElementById("cartCount").innerText=
+    count ? `(${count})` : "";
+
+}
+
+/* =========================================================
+   CHECKOUT
+========================================================= */
+
+function checkout(){
+
+  if(cart.length===0){
+    showToast("Your cart is empty");
+    return;
+  }
+
+  document.getElementById("checkoutModal")
+    .classList.add("show");
+
+}
+
+function closeCheckout(){
+
+  document.getElementById("checkoutModal")
+    .classList.remove("show");
+
+}
+
+function placeOrder(){
+
+  const name=document.getElementById("checkoutName").value;
+
+  if(!name){
+    showToast("Please enter your name");
+    return;
+  }
+
+  const total=cart.reduce((sum,item)=>{
+
+    const p=products.find(x=>x.id===item.id);
+
+    return sum+(p.price*item.qty);
+
+  },99);
+
+  orders.unshift({
+
+    id:"MS-"+Math.floor(1000+Math.random()*9000),
+
+    customer:name,
+
+    total:total,
+
+    status:"Processing"
+
+  });
+
+  cart=[];
+
+  saveData();
+
+  closeCheckout();
+
+  updateCartCount();
+
+  renderCart();
+
+  showToast("Order placed successfully");
+
+}
+
+/* =========================================================
+   ORDERS
+========================================================= */
+
+function renderOrders(){
+
+  const filter=
+    document.getElementById("orderFilter")?.value || "all";
+
+  let list=orders;
+
+  if(filter!=="all"){
+    list=orders.filter(o=>o.status===filter);
+  }
+
+  const table=document.getElementById("ordersTable");
+
+  table.innerHTML=`
+
+    <thead>
+
+      <tr>
+        <th>Order</th>
+        <th>Customer</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      ${list.map(o=>`
+
+        <tr>
+
+          <td><b>#${o.id}</b></td>
+
+          <td>${o.customer}</td>
+
+          <td>₹${o.total.toLocaleString()}</td>
+
+          <td>
+            <span class="status ${statusClass(o.status)}">
+              ${o.status}
+            </span>
+          </td>
+
+          <td>
+
+            <select
+              class="filter"
+              onchange="changeOrderStatus('${o.id}',this.value)"
+            >
+
+              <option ${o.status==="Processing"?"selected":""}>
+                Processing
+              </option>
+
+              <option ${o.status==="Shipped"?"selected":""}>
+                Shipped
+              </option>
+
+              <option ${o.status==="Delivered"?"selected":""}>
+                Delivered
+              </option>
+
+              <option ${o.status==="Cancelled"?"selected":""}>
+                Cancelled
+              </option>
+
+            </select>
+
+          </td>
+
+        </tr>
+
+      `).join("")}
+
+    </tbody>
+
+  `;
+
+}
+
+function statusClass(status){
+
+  if(status==="Processing")return "pending";
+
+  if(status==="Cancelled")return "cancelled";
+
+  if(status==="Shipped")return "shipped";
+
+  return "";
+
+}
+
+function changeOrderStatus(id,status){
+
+  const order=orders.find(o=>o.id===id);
+
+  if(order){
+    order.status=status;
+    saveData();
+    renderOrders();
+    showToast("Order status updated");
+  }
+
+}
+
+/* =========================================================
+   INVENTORY
+========================================================= */
+
+function renderInventory(){
+
+  document.getElementById("inventoryTable").innerHTML=
+
+    products.map(p=>`
+
+      <tr>
+
+        <td>
+          <div class="customer">
+
+            <img
+              src="${p.image}"
+              style="width:35px;height:35px;object-fit:cover;border-radius:6px"
+            >
+
+            ${p.name}
+
+          </div>
+        </td>
+
+        <td>SKU-${p.id}</td>
+
+        <td>${p.stock}</td>
+
+        <td>
+
+          <span class="status ${
+            p.stock===0
+            ?"cancelled"
+            :p.stock<10
+            ?"pending"
+            :""
+          }">
+
+            ${
+              p.stock===0
+              ?"Out of stock"
+              :p.stock<10
+              ?"Low stock"
+              :"In stock"
+            }
+
+          </span>
+
+        </td>
+
+        <td>
+          <button
+            class="btn"
+            onclick="restock(${p.id})"
+          >
+            Restock
+          </button>
+        </td>
+
+      </tr>
+
+    `).join("");
+
+}
+
+function restock(id){
+
+  const p=products.find(x=>x.id===id);
+
+  if(p){
+
+    p.stock+=20;
+
+    saveData();
+    renderInventory();
+    renderProducts();
+
+    showToast("Inventory updated");
+
+  }
+
+}
+
+/* =========================================================
+   DISCOUNTS
+========================================================= */
+
+function createDiscount(){
+
+  const code=prompt("Discount code");
+
+  if(code){
+
+    showToast(
+      "Discount "+code.toUpperCase()+" created"
+    );
+
+  }
+
+}
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+function toggleSwitch(el){
+
+  el.classList.toggle("on");
+
+}
+
+function sortProducts(type){
+
+  if(type==="priceLow"){
+    products.sort((a,b)=>a.price-b.price);
+  }
+
+  if(type==="priceHigh"){
+    products.sort((a,b)=>b.price-a.price);
+  }
+
+  if(type==="name"){
+    products.sort((a,b)=>a.name.localeCompare(b.name));
+  }
+
+  renderProducts();
+
+}
+
+/* =========================================================
+   GLOBAL SEARCH
+========================================================= */
+
+function globalSearch(){
+
+  const value=
+    document.getElementById("globalSearch")
+    .value
+    .toLowerCase();
+
+  if(!value)return;
+
+  const match=products.find(p=>
+    p.name.toLowerCase().includes(value)
+  );
+
+  if(match){
+
+    showView("products");
+
+    document.getElementById("productSearch").value=value;
+
+    renderProducts();
+
+  }
+
+}
+
+/* =========================================================
+   EXPORT CSV
+========================================================= */
+
+function exportOrders(){
+
+  let csv="Order,Customer,Total,Status\n";
+
+  orders.forEach(o=>{
+
+    csv+=
+      `${o.id},${o.customer},${o.total},${o.status}\n`;
+
+  });
+
+  const blob=new Blob([csv],{
+    type:"text/csv"
+  });
+
+  const url=URL.createObjectURL(blob);
+
+  const a=document.createElement("a");
+
+  a.href=url;
+  a.download="orders.csv";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+  showToast("Orders exported");
+
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+function showToast(message){
+
+  const toast=document.getElementById("toast");
+
+  toast.innerText=message;
+
+  toast.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+    toast.classList.remove("show");
+  },2500);
+
+}
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+function saveData(){
+
+  localStorage.setItem(
+    "monoshop_products",
+    JSON.stringify(products)
+  );
+
+  localStorage.setItem(
+    "monoshop_orders",
+    JSON.stringify(orders)
+  );
+
+  localStorage.setItem(
+    "monoshop_cart",
+    JSON.stringify(cart)
+  );
+
+}
+
+function loadData(){
+
+  const savedProducts=
+    localStorage.getItem("monoshop_products");
+
+  const savedOrders=
+    localStorage.getItem("monoshop_orders");
+
+  const savedCart=
+    localStorage.getItem("monoshop_cart");
+
+  if(savedProducts){
+    products=JSON.parse(savedProducts);
+  }
+
+  if(savedOrders){
+    orders=JSON.parse(savedOrders);
+  }
+
+  if(savedCart){
+    cart=JSON.parse(savedCart);
+  }
+
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+
+function renderRecentOrders(){
+
+  document.getElementById("recentOrders").innerHTML=`
+
+    <thead>
+      <tr>
+        <th>Order</th>
+        <th>Customer</th>
+        <th>Total</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      ${orders.slice(0,5).map(o=>`
+
+        <tr>
+          <td>#${o.id}</td>
+          <td>${o.customer}</td>
+          <td>₹${o.total.toLocaleString()}</td>
+          <td>
+            <span class="status ${statusClass(o.status)}">
+              ${o.status}
+            </span>
+          </td>
+        </tr>
+
+      `).join("")}
+
+    </tbody>
+
+  `;
+
+}
+
+loadData();
+
+renderProducts();
+renderRecentOrders();
+renderInventory();
+updateCartCount();
+
+</script>
+
+</body>
+</html>
