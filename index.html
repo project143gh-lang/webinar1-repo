@@ -2,669 +2,439 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NovaCart — Ecommerce Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MonoShop — Ecommerce</title>
 
 <style>
-:root {
-  --bg: #f5f7fb;
-  --card: #ffffff;
-  --text: #171923;
-  --muted: #7b8191;
-  --border: #e8ebf2;
-  --primary: #635bff;
-  --primary-dark: #5148e8;
-  --green: #18b981;
-  --red: #ef5b6b;
-  --orange: #f5a623;
-  --shadow: 0 10px 35px rgba(31, 35, 55, .07);
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:#f7f7f5;
+  color:#171717;
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.app{
+  display:flex;
+  min-height:100vh;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* SIDEBAR */
+.sidebar{
+  width:220px;
+  background:#111;
+  color:#fff;
+  padding:24px 16px;
+  position:fixed;
+  inset:0 auto 0 0;
 }
 
-body {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: var(--bg);
-  color: var(--text);
+.logo{
+  font-size:20px;
+  font-weight:800;
+  padding:0 12px 35px;
+  letter-spacing:-.7px;
 }
 
-/* Layout */
-.app {
-  display: flex;
-  min-height: 100vh;
+.logo span{color:#a7ff54}
+
+.menu{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
 }
 
-.sidebar {
-  width: 250px;
-  background: #11131c;
-  color: white;
-  padding: 24px 16px;
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 20;
+.menu a{
+  color:#999;
+  text-decoration:none;
+  padding:11px 12px;
+  border-radius:9px;
+  font-size:13px;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 21px;
-  font-weight: 800;
-  padding: 0 12px 32px;
+.menu a:hover,
+.menu a.active{
+  color:#fff;
+  background:#242424;
 }
 
-.logo-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 11px;
-  background: linear-gradient(135deg, #8179ff, #554be8);
-  display: grid;
-  place-items: center;
-  font-size: 17px;
+.menu-title{
+  color:#555;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  padding:20px 12px 8px;
 }
 
-.nav-title {
-  color: #666b7b;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.4px;
-  padding: 0 12px 10px;
+.store{
+  position:absolute;
+  bottom:22px;
+  left:16px;
+  right:16px;
+  padding:12px;
+  border-top:1px solid #292929;
+  color:#aaa;
+  font-size:11px;
 }
 
-.nav {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 30px;
+/* MAIN */
+.main{
+  margin-left:220px;
+  width:calc(100% - 220px);
 }
 
-.nav a {
-  color: #999eae;
-  text-decoration: none;
-  padding: 12px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  transition: .2s;
+.header{
+  height:70px;
+  background:#fff;
+  border-bottom:1px solid #e8e8e8;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
 }
 
-.nav a:hover,
-.nav a.active {
-  background: rgba(255,255,255,.08);
-  color: white;
+.search{
+  width:280px;
+  background:#f5f5f3;
+  border:1px solid #eee;
+  border-radius:8px;
+  padding:10px 13px;
+  outline:none;
+  font-size:12px;
 }
 
-.nav a.active {
-  background: linear-gradient(90deg, rgba(99,91,255,.22), rgba(99,91,255,.08));
+.header-right{
+  display:flex;
+  gap:10px;
+  align-items:center;
 }
 
-.nav-icon {
-  width: 20px;
-  text-align: center;
+.circle{
+  width:34px;
+  height:34px;
+  border:1px solid #e5e5e5;
+  border-radius:50%;
+  background:white;
 }
 
-.sidebar-bottom {
-  position: absolute;
-  bottom: 22px;
-  left: 16px;
-  right: 16px;
-  background: #1a1d28;
-  border: 1px solid #282c38;
-  border-radius: 14px;
-  padding: 14px;
+.avatar{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#a7ff54;
+  display:grid;
+  place-items:center;
+  font-size:11px;
+  font-weight:bold;
 }
 
-.user {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* CONTENT */
+.content{
+  padding:30px;
+  max-width:1400px;
 }
 
-.avatar {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  display: grid;
-  place-items: center;
-  color: #612d35;
-  font-weight: 700;
+.welcome{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:24px;
 }
 
-.user-name {
-  font-size: 13px;
-  font-weight: 700;
+.welcome h1{
+  font-size:25px;
+  letter-spacing:-1px;
 }
 
-.user-role {
-  color: #777d8c;
-  font-size: 11px;
-  margin-top: 2px;
+.welcome p{
+  color:#888;
+  font-size:12px;
+  margin-top:5px;
 }
 
-/* Main */
-.main {
-  margin-left: 250px;
-  width: calc(100% - 250px);
+.date{
+  background:white;
+  border:1px solid #e4e4e4;
+  border-radius:8px;
+  padding:9px 12px;
+  font-size:11px;
 }
 
-.topbar {
-  height: 76px;
-  background: rgba(255,255,255,.9);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 34px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  backdrop-filter: blur(12px);
+/* STATS */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:18px;
 }
 
-.search {
-  width: 340px;
-  position: relative;
+.card{
+  background:#fff;
+  border:1px solid #e8e8e8;
+  border-radius:12px;
 }
 
-.search input {
-  width: 100%;
-  padding: 12px 16px 12px 42px;
-  border: 1px solid var(--border);
-  background: #f8f9fc;
-  border-radius: 11px;
-  outline: none;
-  font-size: 13px;
+.stat{
+  padding:18px;
 }
 
-.search span {
-  position: absolute;
-  left: 15px;
-  top: 11px;
-  color: #8d93a2;
+.stat label{
+  font-size:11px;
+  color:#999;
 }
 
-.top-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.stat h2{
+  font-size:23px;
+  margin:10px 0 5px;
+  letter-spacing:-.7px;
 }
 
-.icon-btn {
-  width: 39px;
-  height: 39px;
-  border: 1px solid var(--border);
-  background: white;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
+.green{
+  color:#19a463;
+  font-size:10px;
 }
 
-.content {
-  padding: 30px 34px 50px;
-  max-width: 1600px;
-  margin: auto;
+/* DASHBOARD GRID */
+.grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:18px;
+  margin-bottom:18px;
 }
 
-.heading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-bottom: 25px;
+.panel{
+  padding:20px;
 }
 
-.heading h1 {
-  font-size: 27px;
-  letter-spacing: -.7px;
+.panel-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
 }
 
-.heading p {
-  color: var(--muted);
-  font-size: 13px;
-  margin-top: 6px;
+.panel-head h3{
+  font-size:14px;
 }
 
-.date-btn {
-  border: 1px solid var(--border);
-  background: white;
-  padding: 11px 15px;
-  border-radius: 10px;
-  color: #555b6d;
-  cursor: pointer;
+.panel-head p{
+  font-size:10px;
+  color:#999;
+  margin-top:3px;
 }
 
-/* Stats */
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
-  margin-bottom: 20px;
-}
-
-.card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-}
-
-.stat {
-  padding: 21px;
-}
-
-.stat-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.stat-label {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.stat-icon {
-  width: 35px;
-  height: 35px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  background: #f0efff;
-  color: var(--primary);
-}
-
-.stat h2 {
-  font-size: 25px;
-  margin: 13px 0 8px;
-  letter-spacing: -.5px;
-}
-
-.growth {
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.up {
-  color: var(--green);
-}
-
-.down {
-  color: var(--red);
-}
-
-/* Charts */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1.7fr 1fr;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.panel {
-  padding: 22px;
-}
-
-.panel-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.panel-title {
-  font-size: 15px;
-  font-weight: 750;
-}
-
-.panel-subtitle {
-  color: var(--muted);
-  font-size: 11px;
-  margin-top: 4px;
-}
-
-.select {
-  border: 1px solid var(--border);
-  padding: 8px 11px;
-  border-radius: 8px;
-  color: #646a79;
-  background: white;
-  font-size: 11px;
-}
-
-/* Sales chart */
-.chart {
-  height: 270px;
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  padding: 20px 8px 28px;
-  overflow: hidden;
-}
-
-.chart::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 25px;
-  height: 190px;
+/* CHART */
+.chart{
+  height:220px;
+  display:flex;
+  align-items:end;
+  gap:10px;
+  padding:20px 5px 25px;
   background:
     repeating-linear-gradient(
       to bottom,
-      #edf0f5 0,
-      #edf0f5 1px,
-      transparent 1px,
-      transparent 47px
+      transparent 0,
+      transparent 43px,
+      #eee 44px
     );
 }
 
-.bar {
-  flex: 1;
-  max-width: 55px;
-  border-radius: 7px 7px 3px 3px;
-  background: linear-gradient(180deg, #776fff, #635bff);
-  position: relative;
-  z-index: 1;
-  cursor: pointer;
-  transition: .25s;
-  min-height: 25px;
+.bar{
+  flex:1;
+  background:#171717;
+  border-radius:5px 5px 2px 2px;
+  position:relative;
+  transition:.2s;
 }
 
-.bar:hover {
-  transform: translateY(-5px);
-  background: linear-gradient(180deg, #918aff, #5148e8);
+.bar:hover{
+  background:#a7ff54;
 }
 
-.bar span {
-  position: absolute;
-  bottom: -23px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: #9196a4;
-  font-size: 10px;
+.bar span{
+  position:absolute;
+  bottom:-20px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:9px;
+  color:#999;
 }
 
-/* Donut */
-.donut-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 25px;
-  min-height: 270px;
+/* PRODUCTS */
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
 }
 
-.donut {
-  width: 170px;
-  height: 170px;
-  border-radius: 50%;
-  background: conic-gradient(
-    #635bff 0 38%,
-    #18b981 38% 67%,
-    #f5a623 67% 84%,
-    #ec6a83 84% 100%
-  );
-  position: relative;
+.product{
+  border:1px solid #eee;
+  border-radius:10px;
+  overflow:hidden;
+  background:#fafafa;
 }
 
-.donut::after {
-  content: "1,248";
-  position: absolute;
-  width: 108px;
-  height: 108px;
-  background: white;
-  border-radius: 50%;
-  top: 31px;
-  left: 31px;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: 20px;
+.product img{
+  width:100%;
+  height:130px;
+  object-fit:cover;
+  display:block;
 }
 
-.legend {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+.product-info{
+  padding:10px;
 }
 
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  font-size: 12px;
-  color: #626878;
+.product-info h4{
+  font-size:11px;
+  margin-bottom:4px;
 }
 
-.dot {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
+.product-info p{
+  font-size:10px;
+  color:#888;
 }
 
-.legend strong {
-  margin-left: auto;
-  color: var(--text);
+.price{
+  margin-top:7px;
+  font-size:11px;
+  font-weight:bold;
 }
 
-/* Lower grid */
-.lower-grid {
-  display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  gap: 20px;
+/* ORDERS */
+.bottom{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:18px;
 }
 
-.table-wrap {
-  overflow-x: auto;
+table{
+  width:100%;
+  border-collapse:collapse;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+th{
+  color:#999;
+  font-size:9px;
+  text-align:left;
+  padding:8px 0;
+  border-bottom:1px solid #eee;
+  text-transform:uppercase;
 }
 
-th {
-  color: #9298a6;
-  text-align: left;
-  font-size: 10px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .6px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
+td{
+  padding:12px 0;
+  border-bottom:1px solid #f1f1f1;
+  font-size:11px;
 }
 
-td {
-  padding: 15px 0;
-  border-bottom: 1px solid #f0f1f5;
-  font-size: 12px;
+.status{
+  padding:4px 7px;
+  border-radius:20px;
+  font-size:9px;
+  background:#edfff4;
+  color:#168950;
 }
 
-.product {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.processing{
+  background:#fff8e7;
+  color:#b27a12;
 }
 
-.product-img {
-  width: 38px;
-  height: 38px;
-  border-radius: 9px;
-  display: grid;
-  place-items: center;
-  font-size: 19px;
+/* TOP PRODUCT */
+.top{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:11px 0;
+  border-bottom:1px solid #eee;
 }
 
-.p1 { background: #e8e7ff; }
-.p2 { background: #e8f7ef; }
-.p3 { background: #fff0db; }
-.p4 { background: #ffe5ea; }
-
-.product-name {
-  font-weight: 700;
+.top img{
+  width:42px;
+  height:42px;
+  object-fit:cover;
+  border-radius:8px;
 }
 
-.product-cat {
-  color: #999eab;
-  font-size: 10px;
-  margin-top: 2px;
+.top-info{
+  flex:1;
 }
 
-.status {
-  padding: 5px 9px;
-  border-radius: 20px;
-  font-size: 10px;
-  font-weight: 700;
+.top-info strong{
+  display:block;
+  font-size:11px;
 }
 
-.delivered {
-  background: #e6f8f1;
-  color: #159768;
+.top-info span{
+  font-size:9px;
+  color:#999;
 }
 
-.processing {
-  background: #fff4dc;
-  color: #c88716;
+.top-price{
+  font-size:11px;
+  font-weight:bold;
 }
 
-.cancelled {
-  background: #ffe9ec;
-  color: #dc596a;
+/* MOBILE */
+.mobile{
+  display:none;
 }
 
-/* Top products */
-.top-product {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: 13px 0;
-  border-bottom: 1px solid #f0f1f5;
-}
-
-.rank {
-  width: 25px;
-  color: #a1a5b1;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.top-img {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  font-size: 21px;
-}
-
-.top-info {
-  flex: 1;
-}
-
-.top-info strong {
-  display: block;
-  font-size: 12px;
-}
-
-.top-info span {
-  color: #999eab;
-  font-size: 10px;
-}
-
-.revenue {
-  text-align: right;
-}
-
-.revenue strong {
-  display: block;
-  font-size: 12px;
-}
-
-.revenue span {
-  color: var(--green);
-  font-size: 10px;
-}
-
-/* Responsive */
-.mobile-menu {
-  display: none;
-}
-
-@media(max-width: 1100px) {
-  .stats {
-    grid-template-columns: repeat(2, 1fr);
+@media(max-width:900px){
+  .sidebar{
+    display:none;
   }
 
-  .dashboard-grid,
-  .lower-grid {
-    grid-template-columns: 1fr;
+  .main{
+    margin-left:0;
+    width:100%;
+  }
+
+  .mobile{
+    display:block;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .grid,
+  .bottom{
+    grid-template-columns:1fr;
   }
 }
 
-@media(max-width: 800px) {
-  .sidebar {
-    transform: translateX(-100%);
-    transition: .25s;
+@media(max-width:550px){
+  .header{
+    padding:0 15px;
   }
 
-  .sidebar.open {
-    transform: translateX(0);
+  .search{
+    width:180px;
   }
 
-  .main {
-    margin-left: 0;
-    width: 100%;
+  .content{
+    padding:20px 15px;
   }
 
-  .topbar {
-    padding: 0 18px;
+  .stats{
+    grid-template-columns:1fr 1fr;
   }
 
-  .search {
-    width: 220px;
+  .welcome{
+    align-items:flex-start;
+    gap:10px;
+    flex-direction:column;
   }
 
-  .mobile-menu {
-    display: grid;
-    place-items: center;
-    margin-right: 10px;
+  .products{
+    grid-template-columns:1fr 1fr;
   }
 
-  .content {
-    padding: 22px 18px 40px;
-  }
-}
-
-@media(max-width: 600px) {
-  .stats {
-    grid-template-columns: 1fr;
-  }
-
-  .heading {
-    align-items: flex-start;
-    gap: 15px;
-    flex-direction: column;
-  }
-
-  .search {
-    display: none;
-  }
-
-  .topbar {
-    height: 65px;
-  }
-
-  .donut-wrap {
-    flex-direction: column;
-    padding: 15px 0;
+  .product img{
+    height:110px;
   }
 }
 </style>
@@ -674,86 +444,51 @@ td {
 
 <div class="app">
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
 
     <div class="logo">
-      <div class="logo-icon">N</div>
-      NovaCart
+      mono<span>shop</span>
     </div>
 
-    <div class="nav-title">Main menu</div>
+    <div class="menu-title">Workspace</div>
 
-    <nav class="nav">
-      <a href="#" class="active">
-        <span class="nav-icon">▦</span>
-        Dashboard
-      </a>
-      <a href="#">
-        <span class="nav-icon">🛍</span>
-        Products
-      </a>
-      <a href="#">
-        <span class="nav-icon">◫</span>
-        Orders
-      </a>
-      <a href="#">
-        <span class="nav-icon">♙</span>
-        Customers
-      </a>
-      <a href="#">
-        <span class="nav-icon">▥</span>
-        Analytics
-      </a>
+    <nav class="menu">
+      <a href="#" class="active">Overview</a>
+      <a href="#">Products</a>
+      <a href="#">Orders</a>
+      <a href="#">Customers</a>
+      <a href="#">Analytics</a>
     </nav>
 
-    <div class="nav-title">Management</div>
+    <div class="menu-title">System</div>
 
-    <nav class="nav">
-      <a href="#">
-        <span class="nav-icon">⚙</span>
-        Settings
-      </a>
-      <a href="#">
-        <span class="nav-icon">?</span>
-        Help center
-      </a>
+    <nav class="menu">
+      <a href="#">Settings</a>
+      <a href="#">Support</a>
     </nav>
 
-    <div class="sidebar-bottom">
-      <div class="user">
-        <div class="avatar">AK</div>
-        <div>
-          <div class="user-name">Alex Kumar</div>
-          <div class="user-role">Store Administrator</div>
-        </div>
-      </div>
+    <div class="store">
+      ● Store online
     </div>
 
   </aside>
 
-  <!-- Main -->
+  <!-- MAIN -->
   <main class="main">
 
-    <header class="topbar">
+    <header class="header">
 
-      <div style="display:flex;align-items:center;">
-        <button class="icon-btn mobile-menu" onclick="toggleMenu()">☰</button>
+      <input
+        class="search"
+        placeholder="Search orders, products..."
+        id="search"
+        oninput="search()"
+      >
 
-        <div class="search">
-          <span>⌕</span>
-          <input
-            id="searchInput"
-            type="text"
-            placeholder="Search products, orders..."
-            oninput="searchProducts()"
-          >
-        </div>
-      </div>
-
-      <div class="top-actions">
-        <button class="icon-btn">⌁</button>
-        <button class="icon-btn">🔔</button>
+      <div class="header-right">
+        <button class="circle">⌁</button>
+        <button class="circle">♢</button>
         <div class="avatar">AK</div>
       </div>
 
@@ -761,146 +496,122 @@ td {
 
     <section class="content">
 
-      <div class="heading">
+      <div class="welcome">
+
         <div>
-          <h1>Good morning, Alex 👋</h1>
-          <p>Here's what's happening with your store today.</p>
+          <h1>Good morning, Alex.</h1>
+          <p>Here's a quick overview of your store.</p>
         </div>
 
-        <button class="date-btn">📅 Oct 1 – Oct 8, 2026 ▾</button>
+        <button class="date">October 8, 2026 ▾</button>
+
       </div>
 
-      <!-- Statistics -->
+      <!-- STATS -->
       <div class="stats">
 
         <div class="card stat">
-          <div class="stat-top">
-            <span class="stat-label">Total Revenue</span>
-            <span class="stat-icon">₹</span>
-          </div>
+          <label>Revenue</label>
           <h2>₹12.84L</h2>
-          <span class="growth up">↗ 18.4% <span style="color:#999">vs last month</span></span>
+          <span class="green">↑ 18.4% this month</span>
         </div>
 
         <div class="card stat">
-          <div class="stat-top">
-            <span class="stat-label">Total Orders</span>
-            <span class="stat-icon">◫</span>
-          </div>
+          <label>Orders</label>
           <h2>1,248</h2>
-          <span class="growth up">↗ 12.8% <span style="color:#999">vs last month</span></span>
+          <span class="green">↑ 12.8% this month</span>
         </div>
 
         <div class="card stat">
-          <div class="stat-top">
-            <span class="stat-label">Customers</span>
-            <span class="stat-icon">♙</span>
-          </div>
+          <label>Customers</label>
           <h2>3,842</h2>
-          <span class="growth up">↗ 8.2% <span style="color:#999">vs last month</span></span>
+          <span class="green">↑ 8.2% this month</span>
         </div>
 
         <div class="card stat">
-          <div class="stat-top">
-            <span class="stat-label">Conversion Rate</span>
-            <span class="stat-icon">◉</span>
-          </div>
+          <label>Conversion</label>
           <h2>4.82%</h2>
-          <span class="growth down">↘ 0.6% <span style="color:#999">vs last month</span></span>
+          <span class="green">↑ 0.6% this month</span>
         </div>
 
       </div>
 
-      <!-- Charts -->
-      <div class="dashboard-grid">
+      <!-- CHART + PRODUCTS -->
+      <div class="grid">
 
         <div class="card panel">
 
-          <div class="panel-header">
+          <div class="panel-head">
             <div>
-              <div class="panel-title">Revenue overview</div>
-              <div class="panel-subtitle">Daily sales performance</div>
+              <h3>Revenue</h3>
+              <p>Last 7 days</p>
             </div>
 
-            <select class="select" onchange="changePeriod(this.value)">
-              <option>Last 7 days</option>
-              <option>Last 30 days</option>
-              <option>Last 90 days</option>
+            <select style="border:1px solid #eee;padding:7px;border-radius:6px;font-size:10px">
+              <option>Weekly</option>
+              <option>Monthly</option>
             </select>
           </div>
 
-          <div class="chart" id="chart">
-            <div class="bar" style="height:42%" title="₹1.42L">
-              <span>Mon</span>
-            </div>
+          <div class="chart">
 
-            <div class="bar" style="height:51%" title="₹1.68L">
-              <span>Tue</span>
-            </div>
+            <div class="bar" style="height:42%"><span>Mon</span></div>
+            <div class="bar" style="height:52%"><span>Tue</span></div>
+            <div class="bar" style="height:47%"><span>Wed</span></div>
+            <div class="bar" style="height:63%"><span>Thu</span></div>
+            <div class="bar" style="height:72%"><span>Fri</span></div>
+            <div class="bar" style="height:91%"><span>Sat</span></div>
+            <div class="bar" style="height:78%"><span>Sun</span></div>
 
-            <div class="bar" style="height:46%" title="₹1.51L">
-              <span>Wed</span>
-            </div>
-
-            <div class="bar" style="height:59%" title="₹1.96L">
-              <span>Thu</span>
-            </div>
-
-            <div class="bar" style="height:68%" title="₹2.24L">
-              <span>Fri</span>
-            </div>
-
-            <div class="bar" style="height:84%" title="₹2.81L">
-              <span>Sat</span>
-            </div>
-
-            <div class="bar" style="height:75%" title="₹2.48L">
-              <span>Sun</span>
-            </div>
           </div>
 
         </div>
 
-        <!-- Order distribution -->
         <div class="card panel">
 
-          <div class="panel-header">
+          <div class="panel-head">
             <div>
-              <div class="panel-title">Order distribution</div>
-              <div class="panel-subtitle">Orders by category</div>
+              <h3>Featured products</h3>
+              <p>Best selling products</p>
             </div>
           </div>
 
-          <div class="donut-wrap">
+          <div class="products">
 
-            <div class="donut"></div>
-
-            <div class="legend">
-
-              <div class="legend-item">
-                <span class="dot" style="background:#635bff"></span>
-                Electronics
-                <strong>38%</strong>
+            <div class="product">
+              <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80">
+              <div class="product-info">
+                <h4>Wireless Headphones</h4>
+                <p>248 sold</p>
+                <div class="price">₹4,999</div>
               </div>
+            </div>
 
-              <div class="legend-item">
-                <span class="dot" style="background:#18b981"></span>
-                Fashion
-                <strong>29%</strong>
+            <div class="product">
+              <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=500&q=80">
+              <div class="product-info">
+                <h4>Smart Watch</h4>
+                <p>189 sold</p>
+                <div class="price">₹6,499</div>
               </div>
+            </div>
 
-              <div class="legend-item">
-                <span class="dot" style="background:#f5a623"></span>
-                Home
-                <strong>17%</strong>
+            <div class="product">
+              <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=500&q=80">
+              <div class="product-info">
+                <h4>Running Shoes</h4>
+                <p>154 sold</p>
+                <div class="price">₹3,899</div>
               </div>
+            </div>
 
-              <div class="legend-item">
-                <span class="dot" style="background:#ec6a83"></span>
-                Other
-                <strong>16%</strong>
+            <div class="product">
+              <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=500&q=80">
+              <div class="product-info">
+                <h4>Urban Backpack</h4>
+                <p>121 sold</p>
+                <div class="price">₹2,299</div>
               </div>
-
             </div>
 
           </div>
@@ -909,175 +620,110 @@ td {
 
       </div>
 
-      <!-- Tables -->
-      <div class="lower-grid">
+      <!-- ORDERS + TOP PRODUCTS -->
+      <div class="bottom">
 
-        <!-- Recent Orders -->
         <div class="card panel">
 
-          <div class="panel-header">
+          <div class="panel-head">
             <div>
-              <div class="panel-title">Recent orders</div>
-              <div class="panel-subtitle">Latest customer purchases</div>
+              <h3>Recent orders</h3>
+              <p>Latest customer activity</p>
             </div>
-
-            <button class="select" onclick="alert('Opening all orders...')">
-              View all →
-            </button>
           </div>
 
-          <div class="table-wrap">
+          <table id="orders">
 
-            <table id="ordersTable">
+            <thead>
+              <tr>
+                <th>Order</th>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
 
-              <thead>
-                <tr>
-                  <th>Order</th>
-                  <th>Customer</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
+            <tbody>
 
-              <tbody>
+              <tr>
+                <td>#MS-8492</td>
+                <td>Rahul Shah</td>
+                <td>₹8,490</td>
+                <td><span class="status">Delivered</span></td>
+              </tr>
 
-                <tr>
-                  <td>#NC-8492</td>
-                  <td>
-                    <div class="product">
-                      <div class="avatar">RS</div>
-                      Rahul Shah
-                    </div>
-                  </td>
-                  <td>₹8,490</td>
-                  <td><span class="status delivered">Delivered</span></td>
-                </tr>
+              <tr>
+                <td>#MS-8491</td>
+                <td>Priya Mehta</td>
+                <td>₹4,280</td>
+                <td><span class="status processing">Processing</span></td>
+              </tr>
 
-                <tr>
-                  <td>#NC-8491</td>
-                  <td>
-                    <div class="product">
-                      <div class="avatar" style="background:#dff7ee">PM</div>
-                      Priya Mehta
-                    </div>
-                  </td>
-                  <td>₹4,280</td>
-                  <td><span class="status processing">Processing</span></td>
-                </tr>
+              <tr>
+                <td>#MS-8490</td>
+                <td>Arjun Kapoor</td>
+                <td>₹12,850</td>
+                <td><span class="status">Delivered</span></td>
+              </tr>
 
-                <tr>
-                  <td>#NC-8490</td>
-                  <td>
-                    <div class="product">
-                      <div class="avatar" style="background:#ffe5cf">AK</div>
-                      Arjun Kapoor
-                    </div>
-                  </td>
-                  <td>₹12,850</td>
-                  <td><span class="status delivered">Delivered</span></td>
-                </tr>
+              <tr>
+                <td>#MS-8489</td>
+                <td>Sneha Nair</td>
+                <td>₹2,190</td>
+                <td><span class="status">Delivered</span></td>
+              </tr>
 
-                <tr>
-                  <td>#NC-8489</td>
-                  <td>
-                    <div class="product">
-                      <div class="avatar" style="background:#e7e2ff">SN</div>
-                      Sneha Nair
-                    </div>
-                  </td>
-                  <td>₹2,190</td>
-                  <td><span class="status cancelled">Cancelled</span></td>
-                </tr>
+            </tbody>
 
-              </tbody>
-
-            </table>
-
-          </div>
+          </table>
 
         </div>
 
-        <!-- Top Products -->
         <div class="card panel">
 
-          <div class="panel-header">
+          <div class="panel-head">
             <div>
-              <div class="panel-title">Top products</div>
-              <div class="panel-subtitle">Best performing products</div>
+              <h3>Top products</h3>
+              <p>Revenue leaders</p>
             </div>
-
-            <span style="font-size:20px">⋮</span>
           </div>
 
-          <div class="top-product">
+          <div class="top">
 
-            <div class="rank">01</div>
-
-            <div class="top-img p1">🎧</div>
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=150&q=80">
 
             <div class="top-info">
-              <strong>AirBeat Pro Headphones</strong>
-              <span>Electronics · 248 sold</span>
+              <strong>Wireless Headphones</strong>
+              <span>248 units sold</span>
             </div>
 
-            <div class="revenue">
-              <strong>₹4.82L</strong>
-              <span>+24%</span>
-            </div>
+            <div class="top-price">₹4.82L</div>
 
           </div>
 
-          <div class="top-product">
+          <div class="top">
 
-            <div class="rank">02</div>
-
-            <div class="top-img p2">⌚</div>
+            <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=150&q=80">
 
             <div class="top-info">
-              <strong>Nova Smart Watch</strong>
-              <span>Wearables · 189 sold</span>
+              <strong>Smart Watch</strong>
+              <span>189 units sold</span>
             </div>
 
-            <div class="revenue">
-              <strong>₹3.64L</strong>
-              <span>+18%</span>
-            </div>
+            <div class="top-price">₹3.64L</div>
 
           </div>
 
-          <div class="top-product">
+          <div class="top">
 
-            <div class="rank">03</div>
-
-            <div class="top-img p3">👟</div>
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=150&q=80">
 
             <div class="top-info">
-              <strong>Urban Runner Shoes</strong>
-              <span>Fashion · 154 sold</span>
+              <strong>Running Shoes</strong>
+              <span>154 units sold</span>
             </div>
 
-            <div class="revenue">
-              <strong>₹2.91L</strong>
-              <span>+15%</span>
-            </div>
-
-          </div>
-
-          <div class="top-product">
-
-            <div class="rank">04</div>
-
-            <div class="top-img p4">🎒</div>
-
-            <div class="top-info">
-              <strong>Everyday Backpack</strong>
-              <span>Accessories · 121 sold</span>
-            </div>
-
-            <div class="revenue">
-              <strong>₹1.87L</strong>
-              <span>+11%</span>
-            </div>
+            <div class="top-price">₹2.91L</div>
 
           </div>
 
@@ -1092,61 +738,25 @@ td {
 </div>
 
 <script>
+function search(){
 
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("open");
-}
-
-function changePeriod(period) {
-
-  const bars = document.querySelectorAll(".bar");
-
-  const values = {
-    "Last 7 days": [42, 51, 46, 59, 68, 84, 75],
-    "Last 30 days": [38, 55, 44, 67, 72, 91, 63],
-    "Last 90 days": [32, 48, 58, 52, 77, 88, 69]
-  };
-
-  values[period].forEach((height, index) => {
-    bars[index].style.height = height + "%";
-  });
-}
-
-function searchProducts() {
-
-  const value = document
-    .getElementById("searchInput")
+  const value =
+    document.getElementById("search")
     .value
     .toLowerCase();
 
-  const rows = document.querySelectorAll("#ordersTable tbody tr");
+  document.querySelectorAll("#orders tbody tr")
+    .forEach(row => {
 
-  rows.forEach(row => {
-    row.style.display =
-      row.innerText.toLowerCase().includes(value)
+      row.style.display =
+        row.innerText
+        .toLowerCase()
+        .includes(value)
         ? ""
         : "none";
-  });
+
+    });
 }
-
-/* Small interactive animation */
-window.addEventListener("load", () => {
-
-  document.querySelectorAll(".stat h2").forEach((el, index) => {
-
-    el.style.opacity = "0";
-    el.style.transform = "translateY(8px)";
-
-    setTimeout(() => {
-      el.style.transition = ".5s ease";
-      el.style.opacity = "1";
-      el.style.transform = "translateY(0)";
-    }, index * 100);
-
-  });
-
-});
-
 </script>
 
 </body>
